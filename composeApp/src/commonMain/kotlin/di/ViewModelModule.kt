@@ -2,10 +2,12 @@ package di
 
 
 import org.koin.dsl.module
-import viewmodel.HomeViewModel
+import viewmodel.CurrentWeatherViewModel
+import viewmodel.WeatherForecastsViewModel
 
 val provideviewModelModule = module {
     single {
-        HomeViewModel(get())
+        WeatherForecastsViewModel(get())
     }
+    single { CurrentWeatherViewModel(get()) }
 }

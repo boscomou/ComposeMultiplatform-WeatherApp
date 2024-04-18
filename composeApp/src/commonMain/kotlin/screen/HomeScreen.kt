@@ -5,10 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 
@@ -24,33 +21,53 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
 import models.Data
-import models.Products
+import models.Data2
 
 import org.koin.compose.getKoin
-import viewmodel.HomeViewModel
+import viewmodel.CurrentWeatherViewModel
+import viewmodel.WeatherForecastsViewModel
 
 
 @Composable
 fun HomeScreen(){
-    val viewModel: HomeViewModel = getKoin().get()
-    val homeScreenState by viewModel.homeViewState.collectAsState()
-    var homeList by remember { mutableStateOf<List<Data>?>(null) }
+    val weatherForecastsViewModel: WeatherForecastsViewModel = getKoin().get()
+    val weatherForecastsScreenState by weatherForecastsViewModel.weatherForecastsViewState.collectAsState()
+    var weatherForecasts by remember { mutableStateOf<List<Data>?>(null) }
+
+    val currentWeatherViewModel: CurrentWeatherViewModel = getKoin().get()
+    val currentWeatherScreenState by currentWeatherViewModel.currentWeatherViewState.collectAsState()
+    var currentWeather by remember { mutableStateOf<List<Data2>?>(null) }
 
     LaunchedEffect(Unit) {
-        viewModel.getProducts()
+        weatherForecastsViewModel.getWeatherForecasts()
     }
-    when (homeScreenState) {
-        is HomeViewModel.HomeScreenState.Loading -> {
+    when (weatherForecastsScreenState) {
+        is WeatherForecastsViewModel.WeatherForecastsScreenState.Loading -> {
             Logger.i("mytag") {"load" }
         }
-        is HomeViewModel.HomeScreenState.Success -> {
-            homeList = (homeScreenState as HomeViewModel.HomeScreenState.Success).responseData.data
+        is WeatherForecastsViewModel.WeatherForecastsScreenState.Success -> {
+            weatherForecasts = (weatherForecastsScreenState as WeatherForecastsViewModel.WeatherForecastsScreenState.Success).responseData.data
             Logger.i("mytag") { "success" }
 
         }
-        is HomeViewModel.HomeScreenState.Error -> {
+        is WeatherForecastsViewModel.WeatherForecastsScreenState.Error -> {
 
+        }
+    }
 
+    LaunchedEffect(Unit) {
+        currentWeatherViewModel.getCurrentWeather()
+    }
+    when (currentWeatherScreenState) {
+        is CurrentWeatherViewModel.CurrentWeatherScreenState.Loading -> {
+            Logger.i("mytag") {"load" }
+        }
+        is CurrentWeatherViewModel.CurrentWeatherScreenState.Success -> {
+            currentWeather = (currentWeatherScreenState as CurrentWeatherViewModel.CurrentWeatherScreenState.Success).responseData.data
+            Logger.i("mytag") { "success" }
+
+        }
+        is CurrentWeatherViewModel.CurrentWeatherScreenState.Error -> {
 
         }
     }
@@ -58,19 +75,9 @@ fun HomeScreen(){
 
     Column(modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally){
-        Column (){
-
-            homeList?.forEach {weatherForecast->
-
-                Text(weatherForecast.maxTemp)
-                println(weatherForecast.weather)
-
-
-            }
-        }
-        Text("My Location")
-        Text("Temperature")
+        horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("Hong Kong")
+        Text(currentWeather?.get(0)?.temp.toString())
         Text("Description")
         Text("Highest Temperature: ,Lowest Temperature: ")
         Card(
@@ -83,16 +90,23 @@ fun HomeScreen(){
             }
 
         }
-        Card(
-            modifier = Modifier.fillMaxWidth().padding(15.dp),
 
-            elevation = 10.dp
-        ) {
-            Column {
-                Text("today")
-                Text("Tommorow")
+        Column {
+
+            weatherForecasts?.forEach { weatherData ->
+                Card(
+                    modifier = Modifier.fillMaxWidth().padding(15.dp),
+
+                    elevation = 10.dp
+                ) {
+                    Row {
+                        Text(weatherData.datetime)
+                        Text(weatherData.maxTemp.toString())
+                        Text(weatherData.minTemp.toString())
+                    }
+
+                }
             }
-
         }
     }
 
