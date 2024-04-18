@@ -1,12 +1,16 @@
+import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.kotlinSerialization)
+
 }
 
 kotlin {
+
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -14,6 +18,7 @@ kotlin {
             }
         }
     }
+    task("testClasses")
     
     listOf(
         iosX64(),
@@ -27,18 +32,38 @@ kotlin {
     }
     
     sourceSets {
-        
+
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.ktor.client.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
             implementation(compose.ui)
+            @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.ktor.client.core)
+            implementation(libs.kotlin.serialization)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.kotlin.serialization)
+            implementation(libs.media.kamel)
+            implementation(libs.koin.compose)
+            implementation("co.touchlab:kermit:2.0.3")
+            val napierVersion= "2.7.1"
+            implementation ("io.github.aakira:napier:$napierVersion")
+
+
+
+
+
+        }
+        iosMain.dependencies {
+
+            implementation(libs.ktor.client.darwin)
         }
     }
 }
@@ -74,6 +99,11 @@ android {
     }
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
+
+
     }
+}
+dependencies {
+    implementation(libs.firebase.crashlytics.buildtools)
 }
 
