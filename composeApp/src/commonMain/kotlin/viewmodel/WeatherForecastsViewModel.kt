@@ -19,14 +19,15 @@ class WeatherForecastsViewModel(private val networkRepository: NetworkRepository
     private val _weatherForecastsViewState: MutableStateFlow<WeatherForecastsScreenState> = MutableStateFlow(WeatherForecastsScreenState.Loading)
     val weatherForecastsViewState = _weatherForecastsViewState.asStateFlow()
 
-    suspend fun getWeatherForecasts() {
+    suspend fun getWeatherForecasts(location:String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                networkRepository.getWeatherForecastsList().collect { response ->
-                    try {
+                networkRepository.getWeatherForecastsList(location).collect { response ->
+
                         when (response.status) {
                             ApiStatus.LOADING -> {
                                 _weatherForecastsState.update { it.copy(isLoading = true) }
+                                println("---- haha fuck 1 ")
 
                             }
 
@@ -38,6 +39,7 @@ class WeatherForecastsViewModel(private val networkRepository: NetworkRepository
                                         response.data
                                     )
                                 }
+                                println("---- haha fuck 2")
                             }
 
                             ApiStatus.ERROR -> {
@@ -48,10 +50,9 @@ class WeatherForecastsViewModel(private val networkRepository: NetworkRepository
                                         errorMessage = response.message
                                     )
                                 }
+                                println("---- haha fuck 3")
                             }
-                        }
-                    }catch (e: Exception){
-                        Logger.e("mytag100"){"Dfs"}
+
                     }
 
                     _weatherForecastsViewState.value = _weatherForecastsState.value.toUiState()

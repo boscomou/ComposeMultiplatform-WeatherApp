@@ -19,6 +19,7 @@ import di.appModule
 import kotlinx.coroutines.launch
 import org.koin.compose.KoinApplication
 import screen.HomeScreen
+import screen.PreviewScreen
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

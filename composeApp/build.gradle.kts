@@ -37,6 +37,7 @@ kotlin {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.android)
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -52,6 +53,10 @@ kotlin {
             implementation(libs.kotlin.serialization)
             implementation(libs.media.kamel)
             implementation(libs.koin.compose)
+
+            implementation(compose.components.uiToolingPreview)
+            implementation ("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.0")
+
             implementation("co.touchlab:kermit:2.0.3")
             val napierVersion= "2.7.1"
             implementation ("io.github.aakira:napier:$napierVersion")
@@ -105,5 +110,7 @@ android {
 }
 dependencies {
     implementation(libs.firebase.crashlytics.buildtools)
+    implementation(libs.androidx.ui.tooling.preview.desktop)
+    implementation(libs.androidx.ui.tooling.preview.android)
 }
 

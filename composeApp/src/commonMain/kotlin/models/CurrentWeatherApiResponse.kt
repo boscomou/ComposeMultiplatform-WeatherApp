@@ -27,17 +27,17 @@ data class Data2(
     @SerialName("dewpt")
     val dewpt: Double,
     @SerialName("dhi")
-    val dhi: Int,
+    val dhi: Double,
     @SerialName("dni")
-    val dni: Int,
+    val dni: Double,
     @SerialName("elev_angle")
     val elevAngle: Double,
     @SerialName("ghi")
-    val ghi: Int,
+    val ghi: Double,
     @SerialName("gust")
     val gust: Double,
     @SerialName("h_angle")
-    val hAngle: Int,
+    val hAngle: Double,
     @SerialName("lat")
     val lat: Double,
     @SerialName("lon")
@@ -57,7 +57,7 @@ data class Data2(
     @SerialName("snow")
     val snow: Int,
     @SerialName("solar_rad")
-    val solarRad: Int,
+    val solarRad: Double,
     @SerialName("sources")
     val sources: List<String>,
     @SerialName("state_code")
@@ -75,7 +75,7 @@ data class Data2(
     @SerialName("ts")
     val ts: Int,
     @SerialName("uv")
-    val uv: Int,
+    val uv: Double,
     @SerialName("vis")
     val vis: Int,
     @SerialName("weather")

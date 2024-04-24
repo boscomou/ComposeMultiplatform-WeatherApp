@@ -19,11 +19,11 @@ class CurrentWeatherViewModel(private val networkRepository: NetworkRepository) 
     private val _currentWeatherViewState: MutableStateFlow<CurrentWeatherScreenState> = MutableStateFlow(CurrentWeatherScreenState.Loading)
     val currentWeatherViewState = _currentWeatherViewState.asStateFlow()
 
-    suspend fun getCurrentWeather() {
+    suspend fun getCurrentWeather(location:String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                networkRepository.getCurrentWeatherList().collect { response ->
-                    try {
+                networkRepository.getCurrentWeatherList(location).collect { response ->
+
                         when (response.status) {
                             ApiStatus.LOADING -> {
                                 _currentWeatherState.update { it.copy(isLoading = true) }
@@ -50,15 +50,13 @@ class CurrentWeatherViewModel(private val networkRepository: NetworkRepository) 
                                 }
                             }
                         }
-                    }catch (e: Exception){
-                        Logger.e("mytag100"){"Dfs"}
-                    }
+
 
                     _currentWeatherViewState.value = _currentWeatherState.value.toUiState()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Logger.e("mytag2"){e.message.toString()}
+                Logger.e("mytagcurrent"){e.message.toString()}
 
                 _currentWeatherState.update { it.copy(isLoading = false, errorMessage = "Failed to fetch data") }
             }

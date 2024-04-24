@@ -9,12 +9,14 @@ import kotlinx.coroutines.flow.Flow
 import models.CurrentWeatherApiResponse
 import models.WeatherForecastsApiResponse
 
+const val API_KEY = "568d12fbc7a343619ee1ca6c7f9451af"
+
 class NetworkRepository(private val httpClient: HttpClient) {
 
-    suspend fun getWeatherForecastsList(): Flow<NetWorkResult<WeatherForecastsApiResponse?>> {
+    suspend fun getWeatherForecastsList(location:String): Flow<NetWorkResult<WeatherForecastsApiResponse?>> {
         return toResultFlow {
             val response =
-                httpClient.get("https://api.weatherbit.io/v2.0/forecast/daily?city=HongKong&country=HK&key=6f1dc247ee644a61bdbf9d97bd761557"){
+                httpClient.get("https://api.weatherbit.io/v2.0/forecast/daily?&city=$location&key=$API_KEY"){
                     contentType(ContentType.Application.Json)
                 }
                     .body<WeatherForecastsApiResponse>()
@@ -25,10 +27,10 @@ class NetworkRepository(private val httpClient: HttpClient) {
 
     }
 
-    suspend fun getCurrentWeatherList(): Flow<NetWorkResult<CurrentWeatherApiResponse?>>{
+    suspend fun getCurrentWeatherList(location:String): Flow<NetWorkResult<CurrentWeatherApiResponse?>>{
         return toResultFlow {
             val response =
-                httpClient.get("https://api.weatherbit.io/v2.0/current?city=HongKong&country=HK&key=6f1dc247ee644a61bdbf9d97bd761557&include=minutely"){
+                httpClient.get("https://api.weatherbit.io/v2.0/current?city=$location&key=$API_KEY&include=minutely"){
                     contentType(ContentType.Application.Json)
                 }
                     .body<CurrentWeatherApiResponse>()
