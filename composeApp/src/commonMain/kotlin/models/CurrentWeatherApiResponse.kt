@@ -35,7 +35,7 @@ data class Data2(
     @SerialName("ghi")
     val ghi: Double,
     @SerialName("gust")
-    val gust: Double,
+    val gust: Double?,
     @SerialName("h_angle")
     val hAngle: Double,
     @SerialName("lat")

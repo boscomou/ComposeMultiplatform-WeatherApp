@@ -5,7 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class WeatherForecastsApiResponse(
-//
 
     @SerialName( "city_name")
     val cityName: String,

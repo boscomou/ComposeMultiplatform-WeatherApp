@@ -141,144 +141,152 @@ fun HomeScreen(){
         )
     }
     Box(modifier = Modifier.fillMaxSize()) {
-//        if (weatherForecastsFinishLoading == true && currentWeatherFinishLoading == true) {
-            Image(
-                painter = painterResource(Res.drawable.sky),
-                null,
-                modifier = Modifier.matchParentSize(),
-                contentScale = ContentScale.FillBounds,
+      if (weatherForecastsFinishLoading == true && currentWeatherFinishLoading == true) {
+          Image(
+              painter = painterResource(Res.drawable.sky),
+              null,
+              modifier = Modifier.matchParentSize(),
+              contentScale = ContentScale.FillBounds,
 
-                )
+              )
 
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    TabRow(
-                        modifier = Modifier.width(350.dp),
-                        selectedTabIndex = selectedPlaceIndex,
-                        backgroundColor = Color.Transparent,
-                        contentColor = Color.White,
-                        indicator = { tabPositions ->
-                            tabPositions.getOrNull(selectedPlaceIndex)
-                                ?.let { Modifier.tabIndicatorOffset(it) }?.let {
-                                    TabRowDefaults.Indicator(
-                                        //                            modifier = Modifier.tabIndicatorOffset(tabPositions[selectedPlaceIndex]),
-                                        modifier = it,
-                                        color = Color.White
-                                    )
-                                }
-                        }
-                    ) {
-                        places.forEachIndexed { index, place ->
-                            Tab(
-                                selected = selectedPlaceIndex == index,
-                                onClick = {
-                                    selectedPlaceIndex = index
-                                    Logger.e("yo2") { selectedPlaceIndex.toString() }
-                                },
-                                text = { Text(place) }
-                            )
-                        }
-                    }
+          Column(
+              modifier = Modifier.fillMaxSize(),
+              verticalArrangement = Arrangement.Center,
+              horizontalAlignment = Alignment.CenterHorizontally
+          ) {
+              Row(
+                  modifier = Modifier.fillMaxWidth(),
+                  horizontalArrangement = Arrangement.SpaceBetween,
+                  verticalAlignment = Alignment.CenterVertically
+              ) {
+                  TabRow(
+                      modifier = Modifier.width(350.dp),
+                      selectedTabIndex = selectedPlaceIndex,
+                      backgroundColor = Color.Transparent,
+                      contentColor = Color.White,
+                      indicator = { tabPositions ->
+                          tabPositions.getOrNull(selectedPlaceIndex)
+                              ?.let { Modifier.tabIndicatorOffset(it) }?.let {
+                                  TabRowDefaults.Indicator(
+                                      //                            modifier = Modifier.tabIndicatorOffset(tabPositions[selectedPlaceIndex]),
+                                      modifier = it,
+                                      color = Color.White
+                                  )
+                              }
+                      }
+                  ) {
+                      places.forEachIndexed { index, place ->
+                          Tab(
+                              selected = selectedPlaceIndex == index,
+                              onClick = {
+                                  selectedPlaceIndex = index
+                                  Logger.e("yo2") { selectedPlaceIndex.toString() }
+                              },
+                              text = { Text(place) }
+                          )
+                      }
+                  }
 
-                    Button(
-                        onClick = {
-                            showPopUp = true
+                  Button(
+                      onClick = {
+                          showPopUp = true
 
 
-                        }
-                    ) {
+                      }
+                  ) {
 //                    Icon(Icons.Default.Add, contentDescription = "Add Place")
-                        Text("+")
-                    }
-                }
+                      Text("+")
+                  }
+              }
 
-                Text(places[selectedPlaceIndex])
-                Text(currentWeather?.get(0)?.temp.toString())
-                Text("humidity: " + currentWeather?.get(0)?.rh.toString() + " %")
-                Text(currentWeather?.get(0)?.weather?.description.toString())
-                currentWeather?.get(0)?.weather?.let { iconSelector(it.code) }
-                    ?.let { painterResource(it) }?.let {
-                        Image(
-                            painter = it,
-                            null,
-                            modifier = Modifier.size(50.dp).padding(end = 16.dp)
-
-
-                        )
-                    }
-                Text("Highest Temperature: "+ (weatherForecasts?.get(0)?.maxTemp ?: null) +" Lowest Temperature: " + (weatherForecasts?.get(0)?.lowTemp
-                    ?:null ))
+              Text(places[selectedPlaceIndex])
+              Text(currentWeather?.get(0)?.temp.toString())
+              Text("humidity: " + currentWeather?.get(0)?.rh.toString() + " %")
+              Text(currentWeather?.get(0)?.weather?.description.toString())
+              currentWeather?.get(0)?.weather?.let { iconSelector(it.code) }
+                  ?.let { painterResource(it) }?.let {
+                      Image(
+                          painter = it,
+                          null,
+                          modifier = Modifier.size(50.dp).padding(end = 16.dp)
 
 
-                Column {
-                    Card(
-                        modifier = Modifier.padding(15.dp),
-                        elevation = 0.dp,
-                        backgroundColor = Color.Black.copy(alpha = 0.1f),
-
-                        ) {
-                        Column(
-                            modifier = Modifier.fillMaxSize().padding(15.dp).verticalScroll(
-                                rememberScrollState()
-                            ),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally,
-
-                            ) {
-                            weatherForecasts?.forEach { weatherData ->
-                                Card(
-                                    modifier = Modifier.fillMaxWidth().height(90.dp).padding(5.dp)
-                                        .clip(
-                                            RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp)
-                                        ),
-                                    elevation = 0.dp,
-                                    backgroundColor = Color.Blue.copy(alpha = 0.1f),
-
-                                    ) {
-
-                                    Row(
-                                        modifier = Modifier.fillMaxSize(),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                        horizontalArrangement = Arrangement.Center
-                                    ) {
-                                        Text(
-                                            text = weatherData.datetime,
-                                            color = Color.White,
-                                            modifier = Modifier.padding(end = 16.dp)
-                                        )
-                                        Image(
-                                            painter = painterResource(iconSelector(weatherData.weather.code)),
-                                            null,
-                                            modifier = Modifier.size(50.dp).padding(end = 16.dp)
+                      )
+                  }
+              Text(
+                  "Highest Temp " + (weatherForecasts?.component1()?.maxTemp
+                      ?: null) + " Lowest Temp: " + (weatherForecasts?.component1()?.minTemp
+                      ?: null)
+              )
 
 
-                                        )
-                                        Text(
-                                            text = weatherData.maxTemp.toString(),
-                                            color = Color.White,
-                                            modifier = Modifier.padding(end = 16.dp)
-                                        )
-                                        Text(
-                                            text = weatherData.minTemp.toString(),
-                                            color = Color.White
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+              Column {
+                  Card(
+                      modifier = Modifier.padding(15.dp),
+                      elevation = 0.dp,
+                      backgroundColor = Color.Black.copy(alpha = 0.1f),
+
+                      ) {
+                      Column(
+                          modifier = Modifier.fillMaxSize().padding(15.dp).verticalScroll(
+                              rememberScrollState()
+                          ),
+                          verticalArrangement = Arrangement.Center,
+                          horizontalAlignment = Alignment.CenterHorizontally,
+
+                          ) {
+                          weatherForecasts?.forEach { weatherData ->
+                              Card(
+                                  modifier = Modifier.fillMaxWidth().height(90.dp).padding(5.dp)
+                                      .clip(
+                                          RoundedCornerShape(15.dp, 15.dp, 15.dp, 15.dp)
+                                      ),
+                                  elevation = 0.dp,
+                                  backgroundColor = Color.Blue.copy(alpha = 0.1f),
+
+                                  ) {
+
+                                  Row(
+                                      modifier = Modifier.fillMaxSize(),
+                                      verticalAlignment = Alignment.CenterVertically,
+                                      horizontalArrangement = Arrangement.Center
+                                  ) {
+                                      Text(
+                                          text = weatherData.datetime,
+                                          color = Color.White,
+                                          modifier = Modifier.padding(end = 16.dp)
+                                      )
+                                      Image(
+                                          painter = painterResource(iconSelector(weatherData.weather.code)),
+                                          null,
+                                          modifier = Modifier.size(50.dp).padding(end = 16.dp)
 
 
-        }
+                                      )
+                                      Text(
+                                          text = weatherData.maxTemp.toString(),
+                                          color = Color.White,
+                                          modifier = Modifier.padding(end = 16.dp)
+                                      )
+                                      Text(
+                                          text = weatherData.minTemp.toString(),
+                                          color = Color.White
+                                      )
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+
+
+          }
+      }
+        else{
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+
+      }
 
     }
 
