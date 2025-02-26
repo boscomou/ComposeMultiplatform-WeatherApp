@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import models.CurrentWeatherApiResponse
 import models.WeatherForecastsApiResponse
 
-const val API_KEY = "f9bc9f6f041b460ab0e7c15f6fb4e0f5"
+const val API_KEY = "0b1a9eeaab004093a912985bbf9a211c"
 
 class NetworkRepository(private val httpClient: HttpClient) {
 
